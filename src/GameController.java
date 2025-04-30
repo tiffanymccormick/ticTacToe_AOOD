@@ -3,11 +3,20 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 public class GameController {
-    private Player player1 = new Player("Player 1", Color.RED);
-    private Player player2 = new Player("Player 2", Color.BLUE);
+    private Player player1;
+    private Player player2;
 
-    private Player winner = new Player("Player 1", Color.RED);
-    private Player currentPlayer = player1;
+    private Player winner;
+    private Player currentPlayer;
+    private  int count;
+
+    public GameController(){
+        player1 = new Player("Player 1", Color.RED);
+        player2 = new Player("Player 2", Color.BLUE);
+        winner = new Player("Player 1", Color.RED);
+        currentPlayer = player1;
+        
+    }
 
     public void switchPlayer() {
         currentPlayer = (currentPlayer == player1) ? player2 : player1;
@@ -17,6 +26,10 @@ public class GameController {
     public void handleMove(JButton button, int row, int col, Grid grid) {
         Color currentColor = currentPlayer.getColor();
         Color existingColor = button.getBackground();
+        if(count>=5){
+            button.setBackground(Color.WHITE);
+            return;
+        }
 
         if(currentColor.equals(Color.BLUE) && existingColor.equals(Color.RED) || currentColor.equals(Color.RED) && existingColor.equals(Color.BLUE)){
             button.setBackground(new Color(171, 52, 235));
@@ -25,17 +38,34 @@ public class GameController {
         }
 
         if (checkWin(grid, button.getBackground())) {
-            JOptionPane.showMessageDialog(null, currentPlayer.getName() + " wins");
-            // Winner goes first again
+            JOptionPane.showMessageDialog(null, currentPlayer.getName() + " wins!");
+            grid.expandGrid(); // Expand the grid after a win
+            currentPlayer = (currentPlayer == player1) ? player1 : player2; //winner goes first
         } else {
-            switchPlayer();
+            if (isBoardFull(grid)) {
+                JOptionPane.showMessageDialog(null, "It's a draw");
+                grid.resetGrid();
+                currentPlayer = player1; // Player 1 starts after a draw
+            } else {
+                switchPlayer();
+            }
         }
+    }
+    
+    private boolean isBoardFull(Grid grid){
+        JButton[] buttons = grid.getButtons();
+        for(JButton button : buttons){
+            if(button.getBackground()==Color.WHITE){
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean checkWin(Grid grid, Color color) {
         int rows = grid.getRow();
         int cols = grid.getCol();
-        int winLength = Math.min(5, Math.max(rows, cols)); // or fixed to 3, 4, etc.
+        int winLength = rows <= 3 ? 3 : rows <= 5 ? 4 : 5;
     
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -50,6 +80,7 @@ public class GameController {
                 if (checkDirection(grid, row, col, -1, 1, color, winLength)) return true; // ↗
             }
         }
+
     
         return false;
     }

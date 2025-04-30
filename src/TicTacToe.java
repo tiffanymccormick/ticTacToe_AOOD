@@ -1,5 +1,6 @@
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class TicTacToe extends JFrame {
     // GUI components
@@ -11,14 +12,15 @@ public class TicTacToe extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setResizable(false);
-
-    }
-
-    public void initialise(){
-        Grid inital = new Grid();
-        inital.makeGrid(3,3);
-
+        
+        GameController controller = new GameController();
+        Grid grid = new Grid(3, 3, controller);
+        frame.add(grid);
+        
     }
   
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new TicTacToe());
+    }
 }
 
