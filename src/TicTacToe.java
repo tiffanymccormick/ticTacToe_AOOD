@@ -16,7 +16,6 @@ public class TicTacToe extends JFrame {
         GameController controller = new GameController();
         Grid grid = new Grid(3, 3, controller);
         frame.add(grid);
-        
     }
   
     public static void main(String[] args) {

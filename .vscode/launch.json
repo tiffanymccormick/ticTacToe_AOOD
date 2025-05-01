@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Grid",
+            "request": "launch",
+            "mainClass": "Grid",
+            "projectName": "ticTacToe_AOOD_bbc89fd3"
+        },
+        {
             "type": "jdk",
             "request": "launch",
             "name": "Launch Java App"

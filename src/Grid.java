@@ -1,15 +1,16 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
-
 
   public class Grid extends JPanel{
         private int size;
         private int row;
         private int col;
         private GameController controller;
-        JButton[] boardButtons;
+        private JButton[] boardButtons;
         
         public Grid(GameController controller){
             this.row = 3;
@@ -21,6 +22,7 @@ import javax.swing.*;
         public Grid(int rows, int cols, GameController controller){
             row = rows;
             col = cols;
+            //boardButtons = new JButton[rows*cols];
             this.controller = controller;
             makeGrid(rows, cols);
         }
@@ -51,6 +53,14 @@ import javax.swing.*;
             }
             row=i;
             col=j;
+
+            // Add ActionListener to each button
+            boardButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    controller.handleMove((JButton) e.getSource(), i, j, Grid.this);
+                }
+            });
         }
 
         /**
